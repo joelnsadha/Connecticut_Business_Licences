@@ -58,3 +58,4 @@ ON CONFLICT (credentialid) DO NOTHING;
 
 drop_table_queries = [q_drop_ct_business_table]
 create_table_queries = [q_create_table_businsss]
+insert_queries = [q_ct_business_insert]
