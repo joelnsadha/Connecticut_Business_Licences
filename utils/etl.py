@@ -12,9 +12,31 @@ def get_data(filepath):
 
 
 def process_business_data(raw_json, con, cur):
-    df = pd.read_json(raw_json)
-    for index, row in df.iterrows():
-        # Convert Nympy integer to Postgres integer
-        int_row = [int(value) if isinstance(value, np.int64) else value for value in row]
-        cur.execute(queries.q_ct_business_insert, int_row)
+    businesses = []
+    converted = []
+    for biz in raw_json:
+        business_values = []
+        for key, value in biz.items():
+            business_values.append(value)
+        businesses.append(business_values)
+
+    # Convert Nympy integer to Postgres integer
+    for business in businesses[0]:
+        converted_business = [int(value) if isinstance(value, np.int64) else value for value in business]
+        converted.append(converted_business)
+
+    cur.execute(queries.q_ct_business_insert, converted)
+
+
+# Extract all data into dataframe. There may be missing values. Dataframe will solce this
+def process_business(raw_json, con, cur):
+    listings = []
+    for listing in raw_json:
+        listings.extend([listing.get('credentialid'), listing.get('name')])
+
+    # Create dataframe
+    print(listings)
+
+
+
 

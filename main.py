@@ -13,11 +13,14 @@ con, cur = create_database()
 
 if __name__ == '__main__':
     # Create tables in database
-    create_tables(con, cur)
+    #create_tables(con, cur)
 
     # Execute ETL process
-    etl.process_business_data(raw_json=json_response, con=con, cur=cur)
+    #etl.process_business_data(raw_json=json_response, con=con, cur=cur)
+
+    # Test
+    etl.process_business(raw_json=json_response, con=con, cur=cur)
 
     # Close connection
-    con.close()
+    #con.close()
 
