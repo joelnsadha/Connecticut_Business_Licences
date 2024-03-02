@@ -59,7 +59,27 @@ INSERT INTO ct_business (
 )
 
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-ON CONFLICT (credentialid) DO NOTHING;
+ON CONFLICT (credentialid) DO UPDATE SET
+    name = EXCLUDED.name,
+    type = EXCLUDED.type,
+    fullcredentialcode = EXCLUDED.fullcredentialcode,
+    credentialtype = EXCLUDED.credentialtype,
+    credentialnumber = EXCLUDED.credentialnumber,
+    credential = EXCLUDED.credential,
+    status = EXCLUDED.status,
+    active = EXCLUDED.active,
+    issuedate = EXCLUDED.issuedate,
+    effectivedate = EXCLUDED.effectivedate,
+    expirationdate = EXCLUDED.expirationdate,
+    address = EXCLUDED.address,
+    city = EXCLUDED.city,
+    state = EXCLUDED.state,
+    zip = EXCLUDED.zip,
+    recordrefreshedon = EXCLUDED.recordrefreshedon,
+    statusreason = EXCLUDED.statusreason,
+    businessname = EXCLUDED.businessname,
+    credentialsubcategory = EXCLUDED.credentialsubcategory,
+    dba = EXCLUDED.dba;
 """
 
 # Lists of all queries
