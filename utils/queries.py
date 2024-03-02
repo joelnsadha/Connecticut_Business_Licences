@@ -1,8 +1,13 @@
+# Drops postgres database if it exists
 q_drop_database = "DROP DATABASE IF EXISTS ct_business_db;"
+
+# Creates new Postgres database
 q_create_database = "CREATE DATABASE ct_business_db WITH ENCODING 'utf8';"
 
+# Drops table
 q_drop_ct_business_table = """DROP TABLE IF EXISTS ct_business;"""
 
+# Creates new Postgres table
 q_create_table_businsss = """CREATE TABLE ct_business (
     credentialid INT PRIMARY KEY NOT NULL,
     name VARCHAR,
@@ -27,6 +32,7 @@ q_create_table_businsss = """CREATE TABLE ct_business (
     dba VARCHAR
 );"""
 
+# Inserts data into Postgres table
 q_ct_business_insert = """
 INSERT INTO ct_business (
     credentialid,
@@ -56,6 +62,7 @@ VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
 ON CONFLICT (credentialid) DO NOTHING;
 """
 
+# Lists of all queries
 drop_table_queries = [q_drop_ct_business_table]
 create_table_queries = [q_create_table_businsss]
 insert_queries = [q_ct_business_insert]

@@ -6,7 +6,13 @@ from utils import queries
 
 
 def convert_nonetype(listings):
+    """
+    Converts any found NoneType data to N/A
+    :param listings: List
+    :return: List
+    """
     converted_listings = []
+    # Find any NoneTypes in list & convert to N/A
     for listing in listings:
         all_values = []
         for value in listing:
@@ -18,12 +24,24 @@ def convert_nonetype(listings):
 
 # Get json data from API
 def get_data(filepath):
+    """
+    Makes API call and retreives data
+    :param filepath: API Endpoint. URL
+    :return: Json object
+    """
     response = requests.get(filepath)
     response_json = response.json()
     return response_json
 
 
 def process_data(df, con, cur):
+    """
+    Exports each row in DataFrame to postgres database
+    :param df: Pandas DataFrame
+    :param con: Psycopg2 database connection
+    :param cur: Psycopg2 cursor
+    :return: None
+    """
     # Convert Nympy integer to Postgres integer
     for index, row in df.iterrows():
         cur.execute(queries.q_ct_business_insert, list(row))
@@ -32,6 +50,15 @@ def process_data(df, con, cur):
 
 # Extract all data into dataframe. There may be missing values. Dataframe will solce this
 def process_business(raw_json, con, cur):
+    """
+    Extracts each field for each business listing within Json object.
+    Extracted fields are used to create Pandas DataFrame
+    :param raw_json: Json object
+    :param con: Psycopg2 Postgres connection
+    :param cur: Psycopg2 cursor
+    :return: Pandas DataFrame
+    """
+
     listings = []
 
     # Extract each data field
@@ -58,7 +85,7 @@ def process_business(raw_json, con, cur):
         credential_subcategory = listing.get('credentialsubcategory')
         dba = listing.get('dba')
 
-        # Append extracted data fields to a list
+        # Append extracted data fields to a list. Integer fields are converted.
         listings.append([int(business_id), name, business_type, credential_code, credential_type,
                         credential_number, credential, status, int(active), issue_date,
                         effective_date, expiration_date, address, city, state, zip_code,
@@ -73,12 +100,9 @@ def process_business(raw_json, con, cur):
                                                   'effective_date', 'expiration_date', 'address', 'city', 'state', 'zip_code',
                                                   'record_refreshedon', 'status_reason', 'business_name', 'credential_subcategory', 'dba'])
 
-    # Test dataframe
-    # print(df.tail(10))
+    # Return final DataFrame
     return df
 
-
-# Test load process
 
 
 
