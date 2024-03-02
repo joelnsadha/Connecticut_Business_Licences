@@ -23,21 +23,11 @@ def get_data(filepath):
     return response_json
 
 
-def process_business_data(raw_json, con, cur):
-    businesses = []
-    converted = []
-    for biz in raw_json:
-        business_values = []
-        for key, value in biz.items():
-            business_values.append(value)
-        businesses.append(business_values)
-
+def process_data(df, con, cur):
     # Convert Nympy integer to Postgres integer
-    for business in businesses[0]:
-        converted_business = [int(value) if isinstance(value, np.int64) else value for value in business]
-        converted.append(converted_business)
-
-    cur.execute(queries.q_ct_business_insert, converted)
+    for index, row in df.iterrows():
+        cur.execute(queries.q_ct_business_insert, list(row))
+    print('ETL Success!')
 
 
 # Extract all data into dataframe. There may be missing values. Dataframe will solce this
@@ -84,7 +74,12 @@ def process_business(raw_json, con, cur):
                                                   'record_refreshedon', 'status_reason', 'business_name', 'credential_subcategory', 'dba'])
 
     # Test dataframe
-    print(df.tail(10))
+    # print(df.tail(10))
+    return df
+
+
+# Test load process
+
 
 
 

@@ -11,16 +11,16 @@ json_response = etl.get_data(filepath)
 # Postgres connection & cursor
 con, cur = create_database()
 
+# Dataframe
+df = etl.process_business(raw_json=json_response, con=con, cur=cur)
+
 if __name__ == '__main__':
     # Create tables in database
-    #create_tables(con, cur)
+    create_tables(con, cur)
 
-    # Execute ETL process
-    #etl.process_business_data(raw_json=json_response, con=con, cur=cur)
-
-    # Test
-    etl.process_business(raw_json=json_response, con=con, cur=cur)
+    # Load data into database
+    etl.process_data(df=df, con=con, cur=cur)
 
     # Close connection
-    #con.close()
+    con.close()
 
